@@ -693,7 +693,8 @@ class Client extends EventEmitter {
 
         // Disconnect when navigating away when in PAIRING state (detect logout)
         this.pupPage.on('framenavigated', async () => {
-            const appState = await this.getState();
+            const appState = await this.getState()
+                .catch(err => { console.error('Capturado erro direto da WWJS:', err) });
             if(!appState || appState === WAState.PAIRING) {
                 await this.authStrategy.disconnect();
                 this.emit(Events.DISCONNECTED, 'NAVIGATION');
